@@ -106,7 +106,7 @@ class Board:
     # READER EXERCISE: YOU MUST COMPLETE THIS FUNCTION
     def full(self):
         for i in range(len(self.items)):
-            return Dummy not in self.items[i]
+            return Dummy not in self[i]
 
     # This method should draw the X's and O's
     # Of this board on the screen.
