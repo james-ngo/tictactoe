@@ -69,45 +69,33 @@ class Board:
     # If the human has won, return -1. Otherwise, return 0.
     # READER EXERCISE: YOU MUST COMPLETE THIS FUNCTION
     def eval(self):
+        #Keep track of wins
+        winConditions = []
+        #Checks in ambiguous wins
         def ambiguous(wlist):
             return X in wlist and O in wlist
-        def checkHorizontal(board):
-            for i in range(len(board.items)):
-                winner = []
-                if (type(board.items[i][0]) ==
-                    type(board.items[i][1]) ==
-                    type(board.items[i][2])):
-                    winner.append(type(board.items[i][0]))
-                return winner
-        def checkVertical(board):
-            for i in range(len(board.items)):
-                winner = []
-                if (type(board.items[0][i]) ==
-                    type(board.items[1][i]) ==
-                    type(board.items[2][i])):
-                    winner.append(type(board.items[0][i]))
-                return winner
-        def checkDiagonal(board):
-            winner = []
-            if (type(board.items[0][0]) ==
-                type(board.items[1][1]) ==
-                type(board.items[2][2])):
-                winner.append(type(board.items[0][0]))
-            elif (type(board.items[0][2]) ==
-                  type(board.items[1][1]) ==
-                  type(board.items[2][0])):
-                winner.append(type(board[0][2]))
-        winConditions = checkHorizontal(self) + checkVertical(self) + checkDiagonal(self)
-        if ambiguous(winConditions):
-            return None
-        else:
-            try:
-                if type(winConditions[0]) == O:
-                    return Human
-                elif type(wiConditions[0]) == X:
-                    return Computer
-            except:
+        for i in range(len(self.items)):
+            #Checks horizontal wins
+            if type(self.items[i][0]) == type(self.items[i][1]) == type(self.items[i][2]):
+                winConditions.append(type(self.items[i][0]))
+                if ambiguous(winConditions):
+                    return None
+            #Checks vertical wins
+            elif type(self.items[0][i]) == type(self.items[1][i]) == type(self.items[2][i]):
+                winConditions.append(type(self.items[0][i]))
+                if ambiguous(winConditions):
+                    return None
+        if len(winConditions) == 0:
+            if type(self.items[0][0]) == type(self.items[1][1]) == type(self.items[2][2]):
+                winConditions.append(self.items[0][0])
+            elif type(self.items[0][2]) == type(self.items[1][1]) == type(self.items[2][0]):
+                winConditions.append(self.items[0][2])
+            else:
                 return 0
+        if type(winConditions[0]) == O:
+            return -1
+        elif type(winConditions[0]) == X:
+            return 1
     # This method should return True if the board
     # is completely filled up (no dummy turtles).
     # Otherwise, it should return False.
