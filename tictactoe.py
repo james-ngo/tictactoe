@@ -48,7 +48,11 @@ class Board:
     # represent exactly the same state.
     # READER EXERCISE: YOU MUST COMPLETE THIS FUNCTION
     def __eq__(self,other):
-        return self.items == other.items
+        for i in range(len(self.items)):
+            for j in range(len(self[i])):
+                if type(self[i][j]) != type(self[i][j]):
+                    return False
+        return True
 
     # This method will mutate this board to contain all dummy
     # turtles. This way the board can be reset when a new game
