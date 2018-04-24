@@ -69,14 +69,52 @@ class Board:
     # If the human has won, return -1. Otherwise, return 0.
     # READER EXERCISE: YOU MUST COMPLETE THIS FUNCTION
     def eval(self):
-        pass
-
+        def ambiguous(wlist):
+            return X in wlist and O in wlist
+        def checkHorizontal(board):
+            for i in range(len(board.items)):
+                winner = []
+                if (type(board.items[i][0]) ==
+                    type(board.items[i][1]) ==
+                    type(board.items[i][2])):
+                    winner.append(type(board.items[i][0]))
+                return winner
+        def checkVertical(board):
+            for i in range(len(board.items)):
+                winner = []
+                if (type(board.items[0][i]) ==
+                    type(board.items[1][i]) ==
+                    type(board.items[2][i])):
+                    winner.append(type(board.items[0][i]))
+                return winner
+        def checkDiagonal(board):
+            winner = []
+            if (type(board.items[0][0]) ==
+                type(board.items[1][1]) ==
+                type(board.items[2][2])):
+                winner.append(type(board.items[0][0]))
+            elif (type(board.items[0][2]) ==
+                  type(board.items[1][1]) ==
+                  type(board.items[2][0])):
+                winner.append(type(board[0][2]))
+        winConditions = checkHorizontal(self) + checkVertical(self) + checkDiagonal(self)
+        if ambiguous(winConditions):
+            return None
+        else:
+            try:
+                if type(winConditions[0]) == O:
+                    return Human
+                elif type(wiConditions[0]) == X:
+                    return Computer
+            except:
+                return 0
     # This method should return True if the board
     # is completely filled up (no dummy turtles).
     # Otherwise, it should return False.
     # READER EXERCISE: YOU MUST COMPLETE THIS FUNCTION
     def full(self):
-        pass
+        for i in range(len(self.items)):
+            return Dummy not in self.items[i]
 
     # This method should draw the X's and O's
     # Of this board on the screen.
@@ -110,27 +148,29 @@ class Dummy:
 # calling __init__ on the superclass initializes the part of the object that is
 # a RawTurtle.
 class X(RawTurtle):
-    def __init__(self, canvas):
-        super().__init__(canvas)
-        self.ht()
-        self.getscreen().register_shape("X",((-40,-36),(-40,-44),(0,-4),(40,-44),(40,-36), \
-                             (4,0),(40,36),(40,44),(0,4),(-40,44),(-40,36),(-4,0),(-40,-36)))
-        self.shape("X")
-        self.penup()
-        self.speed(5)
-        self.goto(-100,-100)
+    def __init__(self, canvas = None):
+        if canvas != None:
+            super().__init__(canvas)
+            self.ht()
+            self.getscreen().register_shape("X",((-40,-36),(-40,-44),(0,-4),(40,-44),(40,-36),(4,0), \
+                                       (40,36),(40,44),(0,4),(-40,44),(-40,36),(-4,0),(-40,-36)))
+            self.shape("X")
+            self.penup()
+            self.speed(5)
+            self.goto(-100,-100)
 
     def eval(self):
         return Computer
 
 class O(RawTurtle):
-    def __init__(self, canvas):
-        super().__init__(canvas)
-        self.ht()
-        self.shape("circle")
-        self.penup()
-        self.speed(5)
-        self.goto(-100,-100)
+    def __init__(self, canvas = None):
+        if canvas != None:
+            super().__init__(canvas)
+            self.ht()
+            self.shape("circle")
+            self.penup()
+            self.speed(5)
+            self.goto(-100,-100)
 
     def eval(self):
         return Human
