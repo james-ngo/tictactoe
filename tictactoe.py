@@ -73,33 +73,27 @@ class Board:
     # If the human has won, return -1. Otherwise, return 0.
     # READER EXERCISE: YOU MUST COMPLETE THIS FUNCTION
     def eval(self):
-        #Keep track of wins
-        winConditions = []
-        #Checks in ambiguous wins
-        def ambiguous(wlist):
-            return X in wlist and O in wlist
-        for i in range(len(self.items)):
-            #Checks horizontal wins
+        win = []
+        i = 0
+        if (type(self.items[0][0]) == type(self.items[1][1]) == type(self.items[2][2]) or
+            type(self.items[0][2]) == type(self.items[1][1]) == type(self.items[2][0])):
+            win.append(self.items[1][1])
+        while not (X in win and O in win) and i < 3:
             if type(self.items[i][0]) == type(self.items[i][1]) == type(self.items[i][2]):
-                winConditions.append(type(self.items[i][0]))
-                if ambiguous(winConditions):
-                    return None
-            #Checks vertical wins
+                win.append(self.items[i][0])
             elif type(self.items[0][i]) == type(self.items[1][i]) == type(self.items[2][i]):
-                winConditions.append(type(self.items[0][i]))
-                if ambiguous(winConditions):
-                    return None
-        if len(winConditions) == 0:
-            if type(self.items[0][0]) == type(self.items[1][1]) == type(self.items[2][2]):
-                winConditions.append(self.items[0][0])
-            elif type(self.items[0][2]) == type(self.items[1][1]) == type(self.items[2][0]):
-                winConditions.append(self.items[0][2])
-            else:
-                return 0
-        if type(winConditions[0]) == O:
-            return -1
-        elif type(winConditions[0]) == X:
-            return 1
+                win.append(self.items[0][i])
+            i += 1
+        if X in win and O in win:
+            return None
+        try:
+            if type(win[0]) == X:
+                return 1
+            elif type(win[0]) == O:
+                return -1
+        except:
+            return 0
+
     # This method should return True if the board
     # is completely filled up (no dummy turtles).
     # Otherwise, it should return False.
