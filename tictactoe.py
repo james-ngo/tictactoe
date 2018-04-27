@@ -84,7 +84,7 @@ class Board:
             elif type(self.items[0][i]) == type(self.items[1][i]) == type(self.items[2][i]):
                 win.append(self.items[0][i])
             i += 1
-        if X in win and O in win:
+        if len(win) > 1:
             return None
         try:
             if type(win[0]) == X:
