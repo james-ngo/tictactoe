@@ -72,27 +72,33 @@ class Board:
     # state of the board. If the computer has won, return 1.
     # If the human has won, return -1. Otherwise, return 0.
     # READER EXERCISE: YOU MUST COMPLETE THIS FUNCTION
+
+
     def eval(self):
         win = []
         i = 0
-        if (type(self.items[0][0]) == type(self.items[1][1]) == type(self.items[2][2]) or
-            type(self.items[0][2]) == type(self.items[1][1]) == type(self.items[2][0])):
-            win.append(self.items[1][1])
+        if ((type(self.items[0][0]) == type(self.items[1][1]) == type(self.items[2][2]) or
+             type(self.items[0][2]) == type(self.items[1][1]) == type(self.items[2][0])) and
+             type(self.items[1][1]) != Dummy):
+            win.append(type(self.items[1][1]))
         while not (X in win and O in win) and i < 3:
-            if type(self.items[i][0]) == type(self.items[i][1]) == type(self.items[i][2]):
-                win.append(self.items[i][0])
-            elif type(self.items[0][i]) == type(self.items[1][i]) == type(self.items[2][i]):
-                win.append(self.items[0][i])
+            if (type(self.items[i][0]) == type(self.items[i][1]) == type(self.items[i][2]) and
+                type(self.items[i][0]) != Dummy):
+                win.append(type(self.items[i][0]))
+            elif (type(self.items[0][i]) == type(self.items[1][i]) == type(self.items[2][i]) and
+                  type(self.items[0][i]) != Dummy):
+                win.append(type(self.items[0][i]))
             i += 1
-        if len(win) > 1:
+        if X in win and O in win:
             return None
         try:
-            if type(win[0]) == X:
+            if win[0] == X:
                 return 1
-            elif type(win[0]) == O:
+            elif win[0] == O:
                 return -1
         except:
             return 0
+
 
     # This method should return True if the board
     # is completely filled up (no dummy turtles).
@@ -172,7 +178,9 @@ class O(RawTurtle):
 # the board is full.
 # READER EXERCISE: YOU MUST COMPLETE THIS FUNCTION
 def minimax(player,board):
-    pass
+    if board.eval() == 1 or board.eval() == -1 or board.full():
+        return board.eval()
+    return minimax(player * -1, board)
 
 
 
