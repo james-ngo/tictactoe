@@ -106,7 +106,10 @@ class Board:
     # READER EXERCISE: YOU MUST COMPLETE THIS FUNCTION
     def full(self):
         for i in range(len(self.items)):
-            return Dummy not in self[i]
+            for j in range(len(self.items[i])):
+                if type(self[i][j]) == Dummy:
+                    return False
+        return True
 
     # This method should draw the X's and O's
     # Of this board on the screen.
@@ -178,8 +181,12 @@ class O(RawTurtle):
 # the board is full.
 # READER EXERCISE: YOU MUST COMPLETE THIS FUNCTION
 def minimax(player,board):
-    if board.eval() == 1 or board.eval() == -1 or board.full():
-        return board.eval()
+    if player == Computer:
+        if board.eval() == 1 or board.full():
+            return board.eval()
+    elif player == Human:
+        if board.eval() == -1 or board.full():
+            return board.eval()
     return minimax(player * -1, board)
 
 
