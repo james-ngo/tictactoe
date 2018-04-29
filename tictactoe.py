@@ -181,12 +181,24 @@ class O(RawTurtle):
 # the board is full.
 # READER EXERCISE: YOU MUST COMPLETE THIS FUNCTION
 def minimax(player,board):
+    i = 0
+    j = 0
+    if board.eval() == 1:
+        return 1
+    elif board.eval() == -1:
+        return -1
+    elif board.full():
+        return 0
+    while i < 2 and board[i][j].eval() != 0:
+        while j < 2 and board[i][j].eval() != 0:
+            j += 1
+        if board[i][j].eval() == 0:
+            break
+        i += 1
     if player == Computer:
-        if board.eval() == 1 or board.full():
-            return board.eval()
+        board[i][j] = X()
     elif player == Human:
-        if board.eval() == -1 or board.full():
-            return board.eval()
+        board[i][j] = O()
     return minimax(player * -1, board)
 
 
