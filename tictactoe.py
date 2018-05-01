@@ -178,12 +178,9 @@ class O(RawTurtle):
 # READER EXERCISE: YOU MUST COMPLETE THIS FUNCTION
 def minimax(player,board):
     best = 0
-    #print('**RECUR**')
     if board.eval() != 0:
-        #print('**WIN**', board.eval())
         return board.eval()
     elif board.full():
-        #print('**FULL**')
         return 0
     for i in range(3):
         for j in range(3):
@@ -192,18 +189,14 @@ def minimax(player,board):
                     board[i][j] = X()
                 elif player == Human:
                     board[i][j] = O()
-                    #print('**CALL MINIMAX**')
                 value = minimax(player * -1, board)
                 board[i][j] = Dummy()
                 if player == Computer:
                     if value > best:
                         best = value
-                        #print(player, i, j, best)
                 elif player == Human:
                     if value < best:
                         best = value
-                        #print(player, i, j, best)
-    #print('**BEST**', best)
     return best
 
 
@@ -292,17 +285,18 @@ class TicTacToe(tkinter.Frame):
             # READER EXERCISE: YOU MUST COMPLETE THIS CODE
             i = 0
             j = 0
-            while i <= 2 and board[i][j].eval() != 0:
+            while i <= 2:
                 while j < 2 and board[i][j].eval() != 0:
                     j += 1
                 if board[i][j].eval() == 0:
                     board[i][j] = X()
-                    if minimax(Computer, board) == best_move_value:
+                    if board.eval() == best_move_value:
                         maxMove = (i, j)
                         break
                     else:
                         board[i][j] = Dummy()
                 i += 1
+                j = 0
             # After writing this code, the maxMove tuple should
             # contain the best move for the computer. For instance,
             # if the best move is in the first row and third column
