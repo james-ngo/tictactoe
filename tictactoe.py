@@ -50,7 +50,7 @@ class Board:
     def __eq__(self,other):
         for i in range(len(self.items)):
             for j in range(len(self[i])):
-                if type(self[i][j]) != type(self[i][j]):
+                if self[i][j].eval() != self[i][j].eval():
                     return False
         return True
 
@@ -73,7 +73,7 @@ class Board:
     # If the human has won, return -1. Otherwise, return 0.
     # READER EXERCISE: YOU MUST COMPLETE THIS FUNCTION
 
-    
+
     def eval(self):
         win = []
         i = 0
@@ -103,7 +103,7 @@ class Board:
     def full(self):
         for i in range(len(self.items)):
             for j in range(len(self.items[i])):
-                if type(self[i][j]) == Dummy:
+                if self[i][j].eval() == 0:
                     return False
         return True
 
@@ -178,33 +178,35 @@ class O(RawTurtle):
 # READER EXERCISE: YOU MUST COMPLETE THIS FUNCTION
 def minimax(player,board):
     best = 0
+    #print('**RECUR**')
     if board.eval() != 0:
-        print('**WIN**')
+        #print('**WIN**', board.eval())
         return board.eval()
     elif board.full():
-        print('**FULL**')
+        #print('**FULL**')
         return 0
     for i in range(3):
         for j in range(3):
             if board[i][j].eval() == 0:
                 if player == Computer:
                     board[i][j] = X()
-                    value = minimax(player * -1, board)
-                    if value > best:
-                        best = value
                 elif player == Human:
                     board[i][j] = O()
-                    value = minimax(player * -1, board)
+                    #print('**CALL MINIMAX**')
+                value = minimax(player * -1, board)
+                board[i][j] = Dummy()
+                if player == Computer:
+                    if value > best:
+                        best = value
+                        #print(player, i, j, best)
+                elif player == Human:
                     if value < best:
                         best = value
-
-                print(board[0][0].eval(), board[0][1].eval(), board[0][2].eval())
-                print(board[1][0].eval(), board[1][1].eval(), board[1][2].eval())
-                print(board[2][0].eval(), board[2][1].eval(), board[2][2].eval())
-                print('===')
-
-    print('**BEST**')
+                        #print(player, i, j, best)
+    #print('**BEST**', best)
     return best
+
+
 
 
 class TicTacToe(tkinter.Frame):
@@ -290,7 +292,7 @@ class TicTacToe(tkinter.Frame):
             # READER EXERCISE: YOU MUST COMPLETE THIS CODE
             i = 0
             j = 0
-            while i < 2 and board[i][j].eval() != 0:
+            while i <= 2 and board[i][j].eval() != 0:
                 while j < 2 and board[i][j].eval() != 0:
                     j += 1
                 if board[i][j].eval() == 0:
