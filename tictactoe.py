@@ -73,32 +73,28 @@ class Board:
     # If the human has won, return -1. Otherwise, return 0.
     # READER EXERCISE: YOU MUST COMPLETE THIS FUNCTION
 
-
+    
     def eval(self):
         win = []
         i = 0
-        if ((type(self.items[0][0]) == type(self.items[1][1]) == type(self.items[2][2]) or
-             type(self.items[0][2]) == type(self.items[1][1]) == type(self.items[2][0])) and
-             type(self.items[1][1]) != Dummy):
-            win.append(type(self.items[1][1]))
-        while not (X in win and O in win) and i < 3:
-            if (type(self.items[i][0]) == type(self.items[i][1]) == type(self.items[i][2]) and
-                type(self.items[i][0]) != Dummy):
-                win.append(type(self.items[i][0]))
-            elif (type(self.items[0][i]) == type(self.items[1][i]) == type(self.items[2][i]) and
-                  type(self.items[0][i]) != Dummy):
-                win.append(type(self.items[0][i]))
+        if ((self.items[0][0].eval() == self.items[1][1].eval() == self.items[2][2].eval() or
+             self.items[0][2].eval() == self.items[1][1].eval() == self.items[2][0].eval()) and
+             self.items[1][1].eval() != 0):
+            win.append(self.items[1][1].eval())
+        while not (1 in win and -1 in win) and i < 3:
+            if (self.items[i][0].eval() == self.items[i][1].eval() == self.items[i][2].eval() and
+                self.items[i][0].eval() != 0):
+                win.append(self.items[i][0].eval())
+            elif (self.items[0][i].eval() == self.items[1][i].eval() == self.items[2][i].eval() and
+                  self.items[0][i].eval() != 0):
+                win.append(self.items[0][i].eval())
             i += 1
-        if X in win and O in win:
+        if 1 in win and -1 in win:
             return None
         try:
-            if win[0] == X:
-                return 1
-            elif win[0] == O:
-                return -1
+            return win[0]
         except:
             return 0
-
 
     # This method should return True if the board
     # is completely filled up (no dummy turtles).
@@ -181,26 +177,34 @@ class O(RawTurtle):
 # the board is full.
 # READER EXERCISE: YOU MUST COMPLETE THIS FUNCTION
 def minimax(player,board):
-    i = 0
-    j = 0
-    if board.eval() == 1:
-        return 1
-    elif board.eval() == -1:
-        return -1
+    best = 0
+    if board.eval() != 0:
+        print('**WIN**')
+        return board.eval()
     elif board.full():
+        print('**FULL**')
         return 0
-    while i < 2 and board[i][j].eval() != 0:
-        while j < 2 and board[i][j].eval() != 0:
-            j += 1
-        if board[i][j].eval() == 0:
-            break
-        i += 1
-    if player == Computer:
-        board[i][j] = X()
-    elif player == Human:
-        board[i][j] = O()
-    return minimax(player * -1, board)
+    for i in range(3):
+        for j in range(3):
+            if board[i][j].eval() == 0:
+                if player == Computer:
+                    board[i][j] = X()
+                    value = minimax(player * -1, board)
+                    if value > best:
+                        best = value
+                elif player == Human:
+                    board[i][j] = O()
+                    value = minimax(player * -1, board)
+                    if value < best:
+                        best = value
 
+                print(board[0][0].eval(), board[0][1].eval(), board[0][2].eval())
+                print(board[1][0].eval(), board[1][1].eval(), board[1][2].eval())
+                print(board[2][0].eval(), board[2][1].eval(), board[2][2].eval())
+                print('===')
+
+    print('**BEST**')
+    return best
 
 
 class TicTacToe(tkinter.Frame):
@@ -282,7 +286,21 @@ class TicTacToe(tkinter.Frame):
             self.locked = True
 
             # Call Minimax to find the best move to make.
+            best_move_value = minimax(Computer, board)
             # READER EXERCISE: YOU MUST COMPLETE THIS CODE
+            i = 0
+            j = 0
+            while i < 2 and board[i][j].eval() != 0:
+                while j < 2 and board[i][j].eval() != 0:
+                    j += 1
+                if board[i][j].eval() == 0:
+                    board[i][j] = X()
+                    if minimax(Computer, board) == best_move_value:
+                        maxMove = (i, j)
+                        break
+                    else:
+                        board[i][j] = Dummy()
+                i += 1
             # After writing this code, the maxMove tuple should
             # contain the best move for the computer. For instance,
             # if the best move is in the first row and third column
