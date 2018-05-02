@@ -176,8 +176,9 @@ class O(RawTurtle):
 # The base case results when, given the state of the board, someone has won or
 # the board is full.
 # READER EXERCISE: YOU MUST COMPLETE THIS FUNCTION
+
 def minimax(player,board):
-    best = 0
+    moves = []
     if board.eval() != 0:
         return board.eval()
     elif board.full():
@@ -189,15 +190,12 @@ def minimax(player,board):
                     board[i][j] = X()
                 elif player == Human:
                     board[i][j] = O()
-                value = minimax(player * -1, board)
+                moves.append(minimax(player * -1, board))
                 board[i][j] = Dummy()
-                if player == Computer:
-                    if value > best:
-                        best = value
-                elif player == Human:
-                    if value < best:
-                        best = value
-    return best
+    if player == Computer:
+        return max(moves)
+    elif player == Human:
+        return min(moves)
 
 
 
@@ -281,27 +279,32 @@ class TicTacToe(tkinter.Frame):
             self.locked = True
 
             # Call Minimax to find the best move to make.
-            best_move_value = minimax(Computer, board)
             # READER EXERCISE: YOU MUST COMPLETE THIS CODE
-            i = 0
-            j = 0
-            while i <= 2:
-                while j < 2 and board[i][j].eval() != 0:
-                    j += 1
-                if board[i][j].eval() == 0:
-                    board[i][j] = X()
-                    if board.eval() == best_move_value:
-                        maxMove = (i, j)
-                        break
-                    else:
-                        board[i][j] = Dummy()
-                i += 1
-                j = 0
+
+            b = Board()
+            for row in range(3):
+                for col in range(3):
+                    b[row][col] = board[row][col]
+            moves = []
+
+            for i in range(3):
+                for j in range(3):
+                    if b[i][j].eval() == 0:
+                        b[i][j] = X()
+                        moves.append([(i, j), minimax(Human,b)])
+                        b[i][j] = Dummy()
+
+            maxMove = moves[0][0]
+            bestValue = moves[0][1]
+            for val in moves:
+                if val[1] > bestValue:
+                    bestValue = val[1]
+                    maxMove = val[0]
+
             # After writing this code, the maxMove tuple should
             # contain the best move for the computer. For instance,
             # if the best move is in the first row and third column
             # then maxMove would be (0,2).
-
             row, col = maxMove
             board[row][col] = X(cv)
             self.locked = False
