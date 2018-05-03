@@ -50,9 +50,9 @@ class Board:
     def __eq__(self,other):
         for i in range(len(self.items)):
             for j in range(len(self[i])):
-                if self[i][j].eval() != self[i][j].eval():
+                if self[i][j].eval() != other[i][j].eval():
                     return False
-        return True
+        return True 
 
     # This method will mutate this board to contain all dummy
     # turtles. This way the board can be reset when a new game
